@@ -1,0 +1,33 @@
+version: '2'
+services:
+  nginx:
+     build: ./nginx
+     links: 
+        - webserver1
+        - webserver2
+     ports:
+        - "3000:80"
+     networks:
+        - mynetwork
+  webserver1:
+     image: burtwalsh/my_node_web_server:latest 
+     ports:
+        - "3000"
+     volumes:
+        - holdwebdata:/saveddata
+     networks:
+        - mynetwork
+  webserver2:
+     image: burtwalsh/my_node_web_server:latest 
+     ports:
+        - "3000"
+     volumes:
+        - holdwebdata:/saveddata
+     networks:
+        - mynetwork
+networks:
+  mynetwork:
+    driver: "bridge"
+volumes:
+  holdwebdata:
+    driver: "local"
