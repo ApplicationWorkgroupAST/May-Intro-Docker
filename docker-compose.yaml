@@ -10,7 +10,12 @@ services:
      networks:
         - mynetwork
   webserver1:
-     image: burtwalsh/my_node_web_server:latest 
+     build: ./webserver
+     environment:
+        - BUSINESS_LAYER_IP=businesslayer
+        - BUSINESS_LAYER_PORT=8012
+     links: 
+        - businesslayer 
      ports:
         - "3000"
      volumes:
@@ -18,11 +23,23 @@ services:
      networks:
         - mynetwork
   webserver2:
-     image: burtwalsh/my_node_web_server:latest 
+     build: ./webserver
+     environment:
+        - BUSINESS_LAYER_IP=businesslayer
+        - BUSINESS_LAYER_PORT=8012
+     links: 
+        - businesslayer 
      ports:
         - "3000"
      volumes:
         - holdwebdata:/saveddata
+     networks:
+        - mynetwork
+  businesslayer:
+     build: ./microservices
+     stdin_open: true 
+     ports:
+        - "8012"
      networks:
         - mynetwork
 networks:
